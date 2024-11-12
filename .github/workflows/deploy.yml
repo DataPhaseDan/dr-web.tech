@@ -29,4 +29,4 @@ jobs:
         with:
           project: "dr-web.tech" 
           entrypoint: "./main.ts"
-          token: ${{ secrets.DENO_DEPLOY_TOKEN }}
+      
