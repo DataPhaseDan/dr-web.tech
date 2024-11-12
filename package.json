@@ -1,0 +1,17 @@
+{
+  "name": "dr-web.tech",
+  "version": "1.0.0",
+  "description": "Make sure to install Deno: https://deno.land/manual/getting_started/installation",
+  "main": "index.js",
+  "dependencies": {
+    "autoprefixer": "^10.4.20",
+    "cssnano": "^6.1.2",
+    "postcss": "^8.4.48",
+    "tailwindcss": "^3.4.14"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

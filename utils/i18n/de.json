@@ -1,0 +1,172 @@
+{
+	"me": {
+		"text": "Servus! Ich bin am 04.10.1990 in Dornbirn geboren. Meine Leidenschaft ist, das Internet und Software benutzerfreundlich und effizient zu gestalten.\nLebe in Salzburg (Österreich) und arbeite als selbstständiger Web & Software Entwickler. Ich kann Sie in 🇩🇪 🇬🇧 🇪🇸 unterstützen."
+	},
+	"education": {
+		"title": "Ausbildung",
+		"milestones": [
+			{
+				"title": "HTBLuVA Salzburg | Ing. Informatik",
+				"date": "September 2019 - July 2024",
+				"text": "School and Diploma Certificate\nFocus: Software Engineering and Management"
+			},
+			{
+				"title": "Berufsreifeprüfung - University Access, Maturity",
+				"date": "September 2013 - July 2016",
+				"text": "\nFocus: Media Informatics"
+			}
+		]
+	},
+	"experience": {
+		"title": "Beruflicher Werdegang",
+		"jobs": [
+			{
+				"name": "DR Web.tech",
+				"date": "seit September 2024, Salzburg",
+				"stations": [
+					{
+						"role": "selbstständiger Web und Software Entwickler, Full-Stack",
+						"tasks": [
+							"Front- and backend Entwicklungen mittels Typescript/Javascript",
+							"System- und Bedarfsanalyse",
+							"Software- und Anwendungsdesign",
+							"Entwicklung und Programmierung",
+							"System Administration and Programming",
+							"Datenbank- Design und Entwicklung",
+							"Projekt Management",
+							"System Consultant"
+						]
+					}
+				]
+			},
+			{
+				"name": "Num Industrial S.L.",
+				"date": "September 2018 - April 2024, Remote (España) ",
+				"stations": [
+					{
+						"role": "Application and Software Engineer",
+						"tasks": [
+							"Engineering and Maintenance",
+							"Independent Project responsiblity"
+						]
+					}
+				]
+			},
+			{
+				"name": "Rctec GmbH",
+				"date": "March 2017 - August 2018, Salzburg",
+				"stations": [
+					{
+						"role": "Application and Software Engineer",
+						"tasks": [
+							"Engineering and Maintenance",
+							"Independent Project responsiblity"
+						]
+					}
+				]
+			},
+			{
+				"name": "Mercedes Benz Financial Services",
+				"date": "August 2015 - October 2016, Salzburg",
+				"stations": [
+					{
+						"role": "Service and Application  Engineer",
+						"tasks": [
+							"optimisation and maintenance of Database Systems",
+							"ensure QoS"
+						]
+					}
+				]
+			},
+			{
+				"name": "Porsche Informatik",
+				"date": "November 2013 - October 2014, Salzburg",
+				"stations": [
+					{
+						"role": "Network Administration",
+						"tasks": [
+							"Network Administration of a MPLS Network"
+						]
+					}
+				]
+			},
+			{
+				"name": "Sony DADC",
+				"date": "November 2012 - July 2013, Anif",
+				"stations": [
+					{
+						"role": "Digital Distribution Technician / Test Engineer",
+						"tasks": [
+							"Maintenance and QoS Database Systems"
+						]
+					}
+				]
+			}
+		]
+	},
+	"skills": {
+		"title": "Skills",
+		"sections": [
+			{
+				"title": "Programming languages",
+				"skills": [
+					"TypeScript",
+					"JavaScript",
+					"C",
+					"C++",
+					"Python"
+				]
+			},
+			{
+				"title": "Libraries and Frameworks",
+				"skills": [
+					"React",
+					"Node",
+					"Deno",
+					"Next.js",
+					"Payload",
+					"ReactBootstrap",
+					"Express",
+					"Angular",
+					"Axios",
+					"Fresh",
+					"Bootstrap",
+					"Tailwind CSS",
+					"W3.CSS",
+					"Vite"
+				]
+			},
+			{
+				"title": "weitere Qualifikation",
+				"skills": [
+					"Linux",
+					"Docker",
+					"Kubernetes",
+					"Git",
+					"HTML",
+					"SCSS",
+					"SQL",
+					"NoSQL",
+					"German",
+					"English",
+					"Spanish"
+				]
+			}
+		]
+	},
+	"projects": {
+		"title": "Projects"
+	},
+	"contact": {
+		"title": "Contact",
+		"mail": "E-Mail",
+		"message": "Message",
+		"send": "Send",
+		"sent": "Thanks for the message!",
+		"failed": "Something went wrong :("
+	},
+	"footer": {
+		"imprint": "imprint",
+		"privacy": "privacy policy"
+	}
+}
