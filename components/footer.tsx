@@ -42,3 +42,4 @@ const Footer = (data: { translation: Translation["footer"] }) => (
 	</div>
 );
 export default Footer;
+
