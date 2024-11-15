@@ -12,7 +12,7 @@ export const handler: Handlers = {
           headers: { "Content-Type": "application/json" }
         });
       }
-
+   
       let payload;
       try {
         payload = await req.json();
@@ -59,10 +59,10 @@ export const handler: Handlers = {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: "mail_deamon",
+          from: "mail@dr-web.tech",
           to: "daniel.renner@webtechnologies.info",
           subject: `New message from ${mail}`,
-          html: `From: ${mail} ${message}`,
+          html: `From: ${mail} ${message}<`,
         })
       });
 
