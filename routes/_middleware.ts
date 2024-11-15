@@ -22,11 +22,21 @@ export const handler = [
 		res.headers.set("Set-Cookie", `lang=${ctx.state.lang}`);
 		return res;
 	},
-	async function setSecurityHeaders(_req: Request, ctx: FreshContext<State>) {
+	async function setSecurityHeaders(req: Request, ctx: FreshContext<State>) {
 		const resp = await ctx.next();
-		SecurityHeaders.map((header) => {
-			resp.headers.set(header.key, header.value);
-		});
+		
+		// Skip certain security headers for API routes
+		if (!req.url.includes('/api/')) {
+			SecurityHeaders.map((header) => {
+				resp.headers.set(header.key, header.value);
+			});
+		} else {
+			// Set only essential security headers for API routes
+			resp.headers.set("X-Content-Type-Options", "nosniff");
+			resp.headers.set("Referrer-Policy", "origin-when-cross-origin");
+			resp.headers.set("X-Frame-Options", "DENY");
+		}
+		
 		return resp;
 	},
 ];

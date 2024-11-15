@@ -45,13 +45,18 @@ function createEmailContent(from: string, to: string, subject: string, message: 
 
 export const handler: Handlers = {
   async POST(request: Request) {
-    const payload: { mail: string; message: string } | undefined = await request.json();
-    
-    if (!payload) {
-      return new Response("", { status: STATUS_CODE.NoContent });
-    }
-
     try {
+      const payload = await request.json();
+      
+      if (!payload || !payload.mail || !payload.message) {
+        return new Response(JSON.stringify({ error: "Invalid payload" }), { 
+          status: STATUS_CODE.BadRequest,
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+      }
+
       const gmail_user = Deno.env.get("GMAIL_USER");
       if (!gmail_user) {
         throw new Error("Gmail user not found in environment variables");
@@ -80,10 +85,21 @@ export const handler: Handlers = {
         throw new Error(`Gmail API error: ${response.statusText}`);
       }
 
-      return new Response("", { status: STATUS_CODE.OK });
-    } catch (error) {
+      return new Response(JSON.stringify({ status: "success" }), {
+        status: STATUS_CODE.OK,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+    } catch (error: unknown) {
       console.error("Error sending email:", error);
-      return new Response("", { status: STATUS_CODE.BadRequest });
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      return new Response(JSON.stringify({ error: errorMessage }), {
+        status: STATUS_CODE.BadRequest,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
     }
   },
 };
