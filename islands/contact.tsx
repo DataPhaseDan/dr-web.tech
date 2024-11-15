@@ -14,6 +14,9 @@ const Contact = (data: { translation: Translation["contact"] }) => {
 				setStatus("sending");
 				const response = await fetch("/api/mail", {
 					method: "POST",
+					headers: {
+						'Content-Type': 'application/json',
+					},
 					body: JSON.stringify({
 						mail: form.mail,
 						message: form.message,

@@ -1,6 +1,6 @@
 const contentSecurityPolicy = `
     default-src 'none'; 
-    connect-src 'self'; 
+    connect-src 'self' https://oauth2.googleapis.com https://gmail.googleapis.com; 
     font-src 'self'; 
     img-src 'self' https://fresh.deno.dev; 
     script-src 'self' 'unsafe-inline'; 
