@@ -11,11 +11,14 @@ export default function App({ Component }: PageProps) {
 				/>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+				<link rel="icon" type="image/x-icon" href="/favicon.ico" />
 				<link rel="stylesheet" href="/styles.css" />
 			</head>
-			<div class="max-w-xl my-5 mx-auto lg:mx-2 sm:mx-1 text-sm text-white font-plex leading-none tracking-wide md:my-3">
-				<Component />
-			</div>
+			<body>
+				<div class="max-w-xl my-5 mx-auto lg:mx-2 sm:mx-1 text-sm text-white font-plex leading-none tracking-wide md:my-3">
+					<Component />
+				</div>
+			</body>
 		</html>
 	);
 }
