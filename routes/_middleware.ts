@@ -25,13 +25,13 @@ export const handler = [
 	async function setSecurityHeaders(req: Request, ctx: FreshContext<State>) {
 		const resp = await ctx.next();
 		
-		// Skip certain security headers for API routes
-		if (!req.url.includes('/api/')) {
+		// Skip security headers for API routes and static files
+		if (!req.url.includes('/api/') && !req.url.includes('/favicon.ico') && !req.url.match(/\.(ico|png|jpg|jpeg|gif|svg|woff2|css)$/)) {
 			SecurityHeaders.map((header) => {
 				resp.headers.set(header.key, header.value);
 			});
 		} else {
-			// Set only essential security headers for API routes
+			// Set only essential security headers for API routes and static files
 			resp.headers.set("X-Content-Type-Options", "nosniff");
 			resp.headers.set("Referrer-Policy", "origin-when-cross-origin");
 			resp.headers.set("X-Frame-Options", "DENY");

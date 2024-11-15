@@ -1,11 +1,12 @@
 const contentSecurityPolicy = `
-    default-src 'none'; 
+    default-src 'self';
     connect-src 'self' https://oauth2.googleapis.com https://gmail.googleapis.com; 
-    font-src 'self'; 
-    img-src 'self' https://fresh.deno.dev; 
-    script-src 'self' 'unsafe-inline'; 
-    style-src 'self';
-    icon-src 'self'
+    font-src 'self';
+    img-src 'self' https://fresh.deno.dev data: blob:;
+    script-src 'self' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline';
+    manifest-src 'self';
+    icon-src 'self' data: https://dr-web.tech https://*.dr-web.tech
 `;
 
 const SecurityHeaders = [
