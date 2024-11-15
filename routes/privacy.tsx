@@ -238,11 +238,11 @@ const Privacy = () => (
 			Verletzung. Eine Liste der Aufsichtsbehörden (für den nichtöffentlichen
 			Bereich) mit Anschrift finden Sie unter:
 			<a
-				href="https://www.bfdi.bund.de/DE/Infothek/Anschriften_Links/anschriften_links-node.html"
+				href="https://www.dsb.gv.at/"
 				target="_blank"
 				rel="noreferrer"
 			>
-				https://www.bfdi.bund.de/DE/Infothek/Anschriften_Links/anschriften_links-node.html
+				https://www.dsb.gv.at/
 			</a>
 		</p>
 		<h2>9. Datensicherheit</h2>
@@ -258,7 +258,7 @@ const Privacy = () => (
 		</p>
 		<h2>10. Aktualität und Änderung dieser Datenschutzerklärung, Fragen</h2>
 		<p>
-			Diese Datenschutzerklärung ist aktuell gültig und hat den Stand März 2022.
+			Diese Datenschutzerklärung ist aktuell gültig und hat den Stand November 2024.
 			<br />
 			<br />
 			Wir behalten uns vor, diese Datenschutzerklärung anzupassen, damit sie
@@ -273,7 +273,7 @@ const Privacy = () => (
 			dieser Datenschutzerklärung.
 			<br />
 			<br />
-			Stand: 16.03.2022
+			Stand: 15.11.2024
 		</p>
 	</div>
 );

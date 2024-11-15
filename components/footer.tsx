@@ -18,7 +18,9 @@ const Footer = (data: { translation: Translation["footer"] }) => (
 					src="vectors/github.svg"
 					alt="Logo von GitHub"
 				/>
+				
 			</a>
+	
 			<a href="https://fresh.deno.dev" class="w-15">
 				<img
 					loading="lazy"
@@ -27,8 +29,15 @@ const Footer = (data: { translation: Translation["footer"] }) => (
 					src="https://fresh.deno.dev/fresh-badge-dark.svg"
 					alt="Made with Fresh"
 				/>
+				
 			</a>
+			<img
+				class="w-13 h-8 logo-hover"
+				src="pixels/drwebf1.png"
+				alt="Logo"
+			/>
 		</div>
+	
 		<a href="/privacy">{data.translation.privacy}</a>
 	</div>
 );

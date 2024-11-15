@@ -1,7 +1,47 @@
 import { Handlers, STATUS_CODE } from "$fresh/server.ts";
+import "jsr:@std/dotenv/load";
 
-// Gmail API endpoint
-const GMAIL_API = "https://gmail.googleapis.com/gmail/v1/users/me/messages/send";
+async function getAccessToken() {
+  const clientId = Deno.env.get("GOOGLE_CLIENT_ID");
+  const clientSecret = Deno.env.get("GOOGLE_CLIENT_SECRET");
+  const refreshToken = Deno.env.get("GOOGLE_REFRESH_TOKEN");
+
+  if (!clientId || !clientSecret || !refreshToken) {
+    throw new Error("OAuth credentials not found in environment variables");
+  }
+
+  const response = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      client_id: clientId,
+      client_secret: clientSecret,
+      refresh_token: refreshToken,
+      grant_type: "refresh_token",
+    }),
+  });
+
+  const data = await response.json();
+  return data.access_token;
+}
+
+function createEmailContent(from: string, to: string, subject: string, message: string): string {
+  const emailContent = [
+    `From: ${from}`,
+    `To: ${to}`,
+    `Subject: ${subject}`,
+    'Content-Type: text/html; charset=utf-8',
+    '',
+    `<html><body>`,
+    `<p>From: ${from}</p>`,
+    `<p>${message}</p>`,
+    `</body></html>`
+  ].join('\r\n');
+
+  return btoa(emailContent).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
 
 export const handler: Handlers = {
   async POST(request: Request) {
@@ -12,53 +52,28 @@ export const handler: Handlers = {
     }
 
     try {
-      // Get the credentials from environment variables
-      const credentials = Deno.env.get("GOOGLE_CREDENTIALS");
-      if (!credentials) {
-        throw new Error("Google credentials not found");
+      const gmail_user = Deno.env.get("GMAIL_USER");
+      if (!gmail_user) {
+        throw new Error("Gmail user not found in environment variables");
       }
 
-      // Parse the credentials
-      const parsedCredentials = JSON.parse(credentials);
-      
-      // Get access token using JWT
-      const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-          assertion: await createJWT(parsedCredentials),
-        }),
-      });
+      // Get fresh access token
+      const accessToken = await getAccessToken();
 
-      const { access_token } = await tokenResponse.json();
-
-      // Construct email in RFC 2822 format
-      const emailContent = [
-        "From: " + Deno.env.get("EMAIL_FROM"),
-        "To: " + Deno.env.get("EMAIL_TO"),
-        "Subject: New message from " + payload.mail,
-        "",
-        payload.message,
-      ].join("\r\n");
-
-      // Encode the email in base64URL format
-      const encodedEmail = btoa(emailContent).replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/, '');
+      // Create email content
+      const subject = `New message from ${payload.mail}`;
+      const raw = createEmailContent(gmail_user, gmail_user, subject, payload.message);
 
       // Send email using Gmail API
-      const response = await fetch(GMAIL_API, {
-        method: "POST",
+      const response = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
+        method: 'POST',
         headers: {
-          "Authorization": `Bearer ${access_token}`,
-          "Content-Type": "application/json",
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          raw: encodedEmail,
-        }),
+          raw: raw
+        })
       });
 
       if (!response.ok) {
@@ -72,57 +87,3 @@ export const handler: Handlers = {
     }
   },
 };
-
-interface GoogleCredentials {
-  client_email: string;
-  private_key: string;
-}
-
-async function createJWT(credentials: GoogleCredentials): Promise<string> {
-  const now = Math.floor(Date.now() / 1000);
-  const oneHour = 60 * 60;
-  
-  const header = {
-    alg: "RS256",
-    typ: "JWT",
-  };
-  
-  const claim = {
-    iss: credentials.client_email,
-    scope: "https://www.googleapis.com/auth/gmail.send",
-    aud: "https://oauth2.googleapis.com/token",
-    exp: now + oneHour,
-    iat: now,
-  };
-
-  // Encode header and claim
-  const encodedHeader = btoa(JSON.stringify(header));
-  const encodedClaim = btoa(JSON.stringify(claim));
-  
-  // Create signature input
-  const signatureInput = `${encodedHeader}.${encodedClaim}`;
-  
-  // Sign using RS256
-  const key = await crypto.subtle.importKey(
-    "pkcs8",
-    new TextEncoder().encode(credentials.private_key),
-    {
-      name: "RSASSA-PKCS1-v1_5",
-      hash: "SHA-256",
-    },
-    false,
-    ["sign"]
-  );
-  
-  const signature = await crypto.subtle.sign(
-    "RSASSA-PKCS1-v1_5",
-    key,
-    new TextEncoder().encode(signatureInput)
-  );
-  
-  // Encode signature
-  const encodedSignature = btoa(String.fromCharCode(...new Uint8Array(signature)));
-  
-  // Return complete JWT
-  return `${signatureInput}.${encodedSignature}`;
-}
