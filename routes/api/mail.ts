@@ -1,74 +1,6 @@
 import { Handlers, STATUS_CODE } from "$fresh/server.ts";
 import "jsr:@std/dotenv/load";
 
-async function getAccessToken() {
-  const clientId = Deno.env.get("GOOGLE_CLIENT_ID");
-  const clientSecret = Deno.env.get("GOOGLE_CLIENT_SECRET");
-  const refreshToken = Deno.env.get("GOOGLE_REFRESH_TOKEN");
-
-  if (!clientId || !clientSecret || !refreshToken) {
-    console.error("Missing env vars:", {
-      hasClientId: !!clientId,
-      hasClientSecret: !!clientSecret,
-      hasRefreshToken: !!refreshToken
-    });
-    throw new Error("OAuth credentials not found in environment variables");
-  }
-
-  try {
-    const tokenParams = {
-      client_id: clientId,
-      client_secret: clientSecret,
-      refresh_token: refreshToken,
-      grant_type: "refresh_token",
-    };
-
-    const response = await fetch("https://oauth2.googleapis.com/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams(tokenParams),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("OAuth token error response:", {
-        status: response.status,
-        statusText: response.statusText,
-        error: errorText
-      });
-      throw new Error(`OAuth token error: ${errorText || response.statusText}`);
-    }
-
-    const data = await response.json();
-    if (!data.access_token) {
-      console.error("No access token in response:", data);
-      throw new Error("No access token received");
-    }
-    return data.access_token;
-  } catch (error) {
-    console.error("Token fetch error:", error);
-    throw error;
-  }
-}
-
-function createEmailContent(from: string, to: string, subject: string, message: string): string {
-  const emailContent = [
-    `From: ${from}`,
-    `To: ${to}`,
-    `Subject: ${subject}`,
-    'Content-Type: text/html; charset=utf-8',
-    '',
-    `<html><body>`,
-    `<p>From: ${from}</p>`,
-    `<p>${message}</p>`,
-    `</body></html>`
-  ].join('\r\n');
-
-  return btoa(emailContent).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-
 export const handler: Handlers = {
   async POST(req: Request) {
     try {
@@ -114,34 +46,34 @@ export const handler: Handlers = {
         });
       }
 
-      const gmail_user = Deno.env.get("GMAIL_USER");
-      if (!gmail_user) {
-        console.error("GMAIL_USER environment variable not found");
-        throw new Error("Gmail user not found in environment variables");
+      const resendApiKey = Deno.env.get("RESEND_API_KEY");
+      if (!resendApiKey) {
+        console.error("RESEND_API_KEY environment variable not found");
+        throw new Error("Resend API key not found in environment variables");
       }
 
-      const accessToken = await getAccessToken();
-
-      const subject = `New message from ${mail}`;
-      const raw = createEmailContent(gmail_user, gmail_user, subject, message);
-
-      const response = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
+      const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          'Authorization': `Bearer ${resendApiKey}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ raw })
+        body: JSON.stringify({
+          from: "mail_deamon",
+          to: "daniel.renner@webtechnologies.info",
+          subject: `New message from ${mail}`,
+          html: `From: ${mail} ${message}`,
+        })
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Gmail API error:", {
+        console.error("Resend API error:", {
           status: response.status,
           statusText: response.statusText,
           error: errorText
         });
-        throw new Error(`Gmail API error: ${errorText || response.statusText}`);
+        throw new Error(`Resend API error: ${errorText || response.statusText}`);
       }
 
       return new Response(JSON.stringify({ status: "success" }), {
@@ -157,4 +89,4 @@ export const handler: Handlers = {
       });
     }
   },
-};
+}
